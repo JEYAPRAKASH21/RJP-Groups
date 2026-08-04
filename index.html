@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RJP Group – Construction | Travels | CSC Center</title>
+  <meta name="description" content="RJP Group – Premium Construction, Luxury Travels, and CSC Digital Services." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- TOP SCROLL PROGRESS BAR -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- ===== INTRO SCREEN ===== -->
+  <div id="intro-screen">
+    <div class="intro-particles" id="particles"></div>
+
+    <!-- WHITE LIGHT FLASH SWEEP (RIGHT TO LEFT) -->
+    <div class="intro-flash-sweep">
+      <div class="flash-beam"></div>
+    </div>
+
+    <div class="intro-logo-wrap" id="introLogoWrap">
+      <div class="logo-3d-container" id="logo3d">
+        <div class="logo-part part-r" id="partR">R</div>
+        <div class="logo-part part-j" id="partJ">J</div>
+        <div class="logo-part part-p" id="partP">P</div>
+      </div>
+      <div class="logo-tagline" id="logoTagline">GROUP</div>
+    </div>
+    <div class="intro-sub" id="introSub">Construction · Travels · CSC Center</div>
+    <div class="intro-progress" id="introProgress">
+      <div class="intro-bar" id="introBar"></div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN WEBSITE ===== -->
+  <div id="main-site" class="hidden">
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <a href="#home" class="nav-logo" id="navLogoLink">
+          <span class="nl-r">R</span><span class="nl-j">J</span><span class="nl-p">P</span>
+          <span class="nl-group">GROUP</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home" class="nav-link active" id="navHome">Home</a></li>
+          <li><a href="quote.html" class="nav-link" id="navConstruction">Construction</a></li>
+          <li><a href="vehicles.html" class="nav-link" id="navTravels">Travels</a></li>
+          <li><a href="csc.html" class="nav-link" id="navCsc">CSC Center</a></li>
+          <li><a href="#contact" class="nav-link" id="navContact">Contact</a></li>
+        </ul>
+        <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION (DYNAMIC LIVE ANIMATED BACKGROUND & 3D LOGO) -->
+    <section class="hero" id="home">
+      <!-- Live Animated Background Canvas -->
+      <canvas class="hero-bg-canvas" id="heroBgCanvas"></canvas>
+
+      <div class="hero-bg-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+      </div>
+      
+      <div class="hero-content">
+        <div class="hero-3d-logo-card" id="hero3dCard">
+          <div class="card-glow"></div>
+          <div class="hero-logo-big">
+            <span class="hl-r">R</span><span class="hl-j">J</span><span class="hl-p">P</span>
+          </div>
+          <div class="hero-logo-sub">GROUP</div>
+        </div>
+
+        <div class="hero-cta-row">
+          <a href="#construction" class="btn-primary" id="heroExploreBtn">Explore Experience</a>
+          <a href="#contact" class="btn-outline" id="heroContactBtn">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="hero-scroll-hint" id="scrollHint">
+        <span>Scroll to Explore</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         1. CONSTRUCTION SECTION (BUILDING SCROLL ANIMATION)
+         ========================================= -->
+    <section class="scroll-section" id="construction">
+      <div class="sticky-wrapper">
+        <div class="boxed-container">
+          <canvas id="buildingCanvas"></canvas>
+
+          <div class="section-label-badge">
+            <span>RJP CONSTRUCTION</span>
+          </div>
+
+          <div class="building-loader-overlay" id="buildingLoader">
+            <div class="building-loader-spinner"></div>
+            <div class="building-loader-text" id="buildingLoaderText">Loading Construction Experience... 0%</div>
+          </div>
+
+          <!-- Action Button: HIDDEN during scroll, pops up & locks scroll ONLY on 100% completion -->
+          <div class="bottom-action-bar" id="buildingCtaWrap">
+            <a href="quote.html" class="btn-primary btn-gold-shine btn-large-glow pulse-glow" id="constructionCta">Get a Free Quote →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         2. TRAVELS SECTION (CAR SCROLL ANIMATION)
+         ========================================= -->
+    <section class="scroll-section" id="travels">
+      <div class="sticky-wrapper">
+        <div class="boxed-container">
+          <canvas id="carCanvas"></canvas>
+
+          <div class="section-label-badge badge-green">
+            <span>RJP TRAVELS</span>
+          </div>
+
+          <div class="car-loader-overlay" id="carLoader">
+            <div class="car-loader-spinner"></div>
+            <div class="car-loader-text" id="carLoaderText">Loading Travels Experience... 0%</div>
+          </div>
+
+          <!-- Action Button: HIDDEN during scroll, pops up & locks scroll ONLY on 100% completion -->
+          <div class="bottom-action-bar" id="carCtaWrap">
+            <a href="vehicles.html" class="btn-primary btn-green btn-large-glow pulse-glow-green" id="carCta">Book Now →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         3. CSC CENTER SECTION (CANVAS SCROLL ANIMATION)
+         ========================================= -->
+    <section class="scroll-section" id="csc">
+      <div class="sticky-wrapper">
+        <div class="boxed-container">
+          <canvas id="cscCanvas"></canvas>
+
+          <div class="section-label-badge badge-purple">
+            <span>RJP CSC CENTER</span>
+          </div>
+
+          <div class="csc-loader-overlay" id="cscLoader">
+            <div class="csc-loader-spinner"></div>
+            <div class="csc-loader-text" id="cscLoaderText">Loading CSC Experience... 0%</div>
+          </div>
+
+          <!-- Action Button: HIDDEN during scroll, pops up & locks scroll ONLY on 100% completion -->
+          <div class="bottom-action-bar" id="cscCtaWrap">
+            <a href="csc.html" class="btn-primary btn-purple btn-large-glow pulse-glow-purple" id="cscCta">Visit Our Center →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="contact-section" id="contact">
+      <div class="contact-inner">
+        <div class="section-intro">
+          <p class="section-label-top">Let's Connect</p>
+          <h2 class="section-heading">Get In <span class="gradient-text">Touch</span></h2>
+          <p class="section-sub">Reach out to us for any of our services. We'd love to hear from you!</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-card" id="contactCard1">
+            <div class="contact-icon">📞</div>
+            <h3>Call Us</h3>
+            <p><a href="tel:7358656647" style="color: inherit; text-decoration: none; font-weight: 700;">+91 7358656647</a></p>
+          </div>
+          <div class="contact-card" id="contactCard2">
+            <div class="contact-icon">📧</div>
+            <h3>Email Us</h3>
+            <p><a href="mailto:jeyaprakashp342@gmail.com" style="color: inherit; text-decoration: none; font-weight: 700;">jeyaprakashp342@gmail.com</a></p>
+          </div>
+          <div class="contact-card" id="contactCard3">
+            <div class="contact-icon">📍</div>
+            <h3>Visit Us</h3>
+            <p>Madasamy Kovil Street,</p>
+            <p>Therbogi, Ramanathapuram</p>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Your Name</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="phoneNo">Phone Number</label>
+              <input type="tel" id="phoneNo" name="phoneNo" placeholder="+91 XXXXX XXXXX" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="serviceSelect">Which Service Are You Interested In?</label>
+            <select id="serviceSelect" name="serviceSelect" required>
+              <option value="" disabled selected>Select a service</option>
+              <option value="construction">Construction</option>
+              <option value="travels">Travels</option>
+              <option value="csc">CSC Center</option>
+              <option value="general">General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="messageText">Message</label>
+            <textarea id="messageText" name="messageText" rows="4" placeholder="Tell us about your requirement..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary btn-full" id="submitFormBtn">Send Message ✉️</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="footer">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <span class="fl-r">R</span><span class="fl-j">J</span><span class="fl-p">P</span>
+          <span class="fl-group">GROUP</span>
+        </div>
+        <p class="footer-tagline">Construction · Travels · CSC Center</p>
+        <p class="footer-copy">© 2026 RJP Group. All Rights Reserved.</p>
+        <div class="footer-links">
+          <a href="#home" id="footerHome">Home</a>
+          <a href="#construction" id="footerConstruction">Construction</a>
+          <a href="#travels" id="footerTravels">Travels</a>
+          <a href="#csc" id="footerCsc">CSC Center</a>
+          <a href="#contact" id="footerContact">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- end main-site -->
+
+  <script src="script.js"></script>
+</body>
+</html>
