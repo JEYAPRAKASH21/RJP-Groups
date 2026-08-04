@@ -110,7 +110,7 @@ function initPage() {
       resizeBuildingCanvas();
       resizeCarCanvas();
       resizeCscCanvas();
-    }, 100);
+    }, 80);
   }, { passive: true });
 }
 
@@ -260,11 +260,11 @@ function drawImageFitBox(ctx, img) {
   const vRatio = cHeight / imgHeight;
   const ratio = Math.max(hRatio, vRatio);
 
-  const drawWidth = imgWidth * ratio;
-  const drawHeight = imgHeight * ratio;
+  const drawWidth = Math.ceil(imgWidth * ratio);
+  const drawHeight = Math.ceil(imgHeight * ratio);
 
-  const offsetX = (cWidth - drawWidth) / 2;
-  const offsetY = (cHeight - drawHeight) / 2;
+  const offsetX = Math.floor((cWidth - drawWidth) / 2);
+  const offsetY = Math.floor((cHeight - drawHeight) / 2);
 
   ctx.clearRect(0, 0, cWidth, cHeight);
   ctx.drawImage(img, 0, 0, imgWidth, imgHeight, offsetX, offsetY, drawWidth, drawHeight);
@@ -283,7 +283,7 @@ function renderBuildingFrame(index) {
 function resizeBuildingCanvas() {
   const canvas = document.getElementById('buildingCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -321,7 +321,7 @@ function renderCarFrame(index) {
 function resizeCarCanvas() {
   const canvas = document.getElementById('carCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -359,7 +359,7 @@ function renderCscFrame(index) {
 function resizeCscCanvas() {
   const canvas = document.getElementById('cscCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
+  const dpr = Math.max(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -384,7 +384,7 @@ function preloadCscImages() {
   }
 }
 
-// ─── 5. STRESS-RESISTANT CARD STACKING & SMOOTH SCRUB ENGINE ──────────────────
+// ─── 5. STRESS-RESISTANT CARD STACKING & SILKY WEIGHTED LERP SCRUB ENGINE ─────────
 function initSmoothScrollScrubEngine() {
   function updateTargets() {
     // 1. CONSTRUCTION SCRUB
@@ -460,20 +460,20 @@ function initSmoothScrollScrubEngine() {
   window.addEventListener('scroll', updateTargets, { passive: true });
   updateTargets();
 
-  // Continuous Adaptive 60FPS Lerp Loop for Zero-Jitter Ultra-Smooth Animation
+  // Continuous Silky Weighted 60FPS Lerp Loop for Zero-Jitter Ultra-Smooth Animation
   function smoothLerpLoop() {
     if (Math.abs(targetBuildingFrameIndex - currentBuildingFrameIndex) > 0.005) {
-      currentBuildingFrameIndex += (targetBuildingFrameIndex - currentBuildingFrameIndex) * 0.22;
+      currentBuildingFrameIndex += (targetBuildingFrameIndex - currentBuildingFrameIndex) * 0.15;
       renderBuildingFrame(Math.round(currentBuildingFrameIndex));
     }
 
     if (Math.abs(targetCarFrameIndex - currentCarFrameIndex) > 0.005) {
-      currentCarFrameIndex += (targetCarFrameIndex - currentCarFrameIndex) * 0.22;
+      currentCarFrameIndex += (targetCarFrameIndex - currentCarFrameIndex) * 0.15;
       renderCarFrame(Math.round(currentCarFrameIndex));
     }
 
     if (Math.abs(targetCscFrameIndex - currentCscFrameIndex) > 0.005) {
-      currentCscFrameIndex += (targetCscFrameIndex - currentCscFrameIndex) * 0.22;
+      currentCscFrameIndex += (targetCscFrameIndex - currentCscFrameIndex) * 0.15;
       renderCscFrame(Math.round(currentCscFrameIndex));
     }
 
