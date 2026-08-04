@@ -543,6 +543,11 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+  filter: contrast(1.04) saturate(1.05) brightness(1.01);
 }
 
 /* Preloader Overlays */

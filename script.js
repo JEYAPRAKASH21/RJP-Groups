@@ -1,6 +1,6 @@
 /* ===================================
    RJP GROUP — JAVASCRIPT
-   100% Instant Preloading, Smooth Lerp & Zero-Lag User Experience
+   100% Instant Preloading, GPU-Accelerated Ultra-HD Rendering & Stress-Resistant Smooth UX
    =================================== */
 
 // Register GSAP ScrollTrigger
@@ -101,6 +101,17 @@ function initPage() {
   resizeBuildingCanvas();
   resizeCarCanvas();
   resizeCscCanvas();
+
+  // Debounced window resize for lag-free performance under heavy stress
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      resizeBuildingCanvas();
+      resizeCarCanvas();
+      resizeCscCanvas();
+    }, 100);
+  }, { passive: true });
 }
 
 // ─── 1. DYNAMIC LIVE ANIMATED BACKGROUND BEHIND LOGO ─────────────────────────
@@ -115,7 +126,7 @@ function initLiveHeroBackground() {
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-  });
+  }, { passive: true });
 
   const particles = [];
   const particleCount = Math.min(60, Math.floor(width / 25));
@@ -138,7 +149,7 @@ function initLiveHeroBackground() {
   window.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-  });
+  }, { passive: true });
 
   let waveOffset = 0;
 
@@ -226,14 +237,14 @@ function initHero3dTilt() {
     const rotateY = (mouseX / (rect.width / 2)) * 12;
 
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-  });
+  }, { passive: true });
 
   card.addEventListener('mouseleave', function () {
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
   });
 }
 
-// ─── UTILITY: ULTRA HD CANVAS COVER DRAWING ──────────────────────────────────
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING ────────────────────
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
@@ -272,10 +283,11 @@ function renderBuildingFrame(index) {
 function resizeBuildingCanvas() {
   const canvas = document.getElementById('buildingCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
   const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
+  if (rect.width === 0 || rect.height === 0) return;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
   renderBuildingFrame(Math.round(currentBuildingFrameIndex));
 }
 
@@ -309,10 +321,11 @@ function renderCarFrame(index) {
 function resizeCarCanvas() {
   const canvas = document.getElementById('carCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
   const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
+  if (rect.width === 0 || rect.height === 0) return;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
   renderCarFrame(Math.round(currentCarFrameIndex));
 }
 
@@ -346,10 +359,11 @@ function renderCscFrame(index) {
 function resizeCscCanvas() {
   const canvas = document.getElementById('cscCanvas');
   if (!canvas) return;
-  const dpr = Math.max(window.devicePixelRatio || 1, 2);
+  const dpr = Math.max(window.devicePixelRatio || 1, 2.5); // Ultra HD High Retina Scaler
   const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
+  if (rect.width === 0 || rect.height === 0) return;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
   renderCscFrame(Math.round(currentCscFrameIndex));
 }
 
@@ -370,7 +384,7 @@ function preloadCscImages() {
   }
 }
 
-// ─── 5. CARD STACKING OVERLAP & BUTTON DISPLAY ENGINE ─────────────────────────
+// ─── 5. STRESS-RESISTANT CARD STACKING & SMOOTH SCRUB ENGINE ──────────────────
 function initSmoothScrollScrubEngine() {
   function updateTargets() {
     // 1. CONSTRUCTION SCRUB
@@ -446,20 +460,20 @@ function initSmoothScrollScrubEngine() {
   window.addEventListener('scroll', updateTargets, { passive: true });
   updateTargets();
 
-  // Continuous 60FPS Lerp Loop for Ultra-Smooth Animation
+  // Continuous Adaptive 60FPS Lerp Loop for Zero-Jitter Ultra-Smooth Animation
   function smoothLerpLoop() {
-    if (Math.abs(targetBuildingFrameIndex - currentBuildingFrameIndex) > 0.01) {
-      currentBuildingFrameIndex += (targetBuildingFrameIndex - currentBuildingFrameIndex) * 0.18;
+    if (Math.abs(targetBuildingFrameIndex - currentBuildingFrameIndex) > 0.005) {
+      currentBuildingFrameIndex += (targetBuildingFrameIndex - currentBuildingFrameIndex) * 0.22;
       renderBuildingFrame(Math.round(currentBuildingFrameIndex));
     }
 
-    if (Math.abs(targetCarFrameIndex - currentCarFrameIndex) > 0.01) {
-      currentCarFrameIndex += (targetCarFrameIndex - currentCarFrameIndex) * 0.18;
+    if (Math.abs(targetCarFrameIndex - currentCarFrameIndex) > 0.005) {
+      currentCarFrameIndex += (targetCarFrameIndex - currentCarFrameIndex) * 0.22;
       renderCarFrame(Math.round(currentCarFrameIndex));
     }
 
-    if (Math.abs(targetCscFrameIndex - currentCscFrameIndex) > 0.01) {
-      currentCscFrameIndex += (targetCscFrameIndex - currentCscFrameIndex) * 0.18;
+    if (Math.abs(targetCscFrameIndex - currentCscFrameIndex) > 0.005) {
+      currentCscFrameIndex += (targetCscFrameIndex - currentCscFrameIndex) * 0.22;
       renderCscFrame(Math.round(currentCscFrameIndex));
     }
 
@@ -480,7 +494,7 @@ function initScrollProgressBar() {
   }, { passive: true });
 }
 
-// ─── NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHT ────────────────────────────
+// ─── NAVBAR SCROLL EFFECT ────────────────────────────────────────────────────
 function initNavbar() {
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', function () {
