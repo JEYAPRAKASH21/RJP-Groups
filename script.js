@@ -248,7 +248,7 @@ function initHero3dTilt() {
   });
 }
 
-// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING ────────────────────
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% UNCROPPED FIT) ───
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
@@ -258,11 +258,12 @@ function drawImageFitBox(ctx, img) {
   const imgHeight = img.naturalHeight;
 
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = isMobile ? 'medium' : 'high';
+  ctx.imageSmoothingQuality = 'high';
 
+  // Contain math: guarantees 100% of the image (roof, wheels, edges) fits cleanly without cropping
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
-  const ratio = Math.max(hRatio, vRatio);
+  const ratio = Math.min(hRatio, vRatio);
 
   const drawWidth = Math.ceil(imgWidth * ratio);
   const drawHeight = Math.ceil(imgHeight * ratio);
