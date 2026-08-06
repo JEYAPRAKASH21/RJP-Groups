@@ -328,12 +328,38 @@ function preloadCarImages() {
 }
 
 // ─── 4. RJP CSC CENTER SEQUENCE PRELOADING ───────────────────────────────────
+function drawCscImageFitBox(ctx, img) {
+  if (!img || !img.complete || img.naturalWidth === 0) return;
+  const canvas = ctx.canvas;
+  const cWidth = canvas.width;
+  const cHeight = canvas.height;
+  const imgWidth = img.naturalWidth;
+  const imgHeight = img.naturalHeight;
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  // Contain math: guarantees 100% of the left wall CSC text is completely visible without cutoff!
+  const hRatio = cWidth / imgWidth;
+  const vRatio = cHeight / imgHeight;
+  const ratio = Math.min(hRatio, vRatio);
+
+  const drawWidth = Math.ceil(imgWidth * ratio);
+  const drawHeight = Math.ceil(imgHeight * ratio);
+
+  const offsetX = Math.floor((cWidth - drawWidth) / 2);
+  const offsetY = Math.floor((cHeight - drawHeight) / 2);
+
+  ctx.clearRect(0, 0, cWidth, cHeight);
+  ctx.drawImage(img, 0, 0, imgWidth, imgHeight, offsetX, offsetY, drawWidth, drawHeight);
+}
+
 function renderCscFrame(index) {
   const canvas = document.getElementById('cscCanvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
     const img = cscImages[index];
-    if (img) drawImageFitBox(ctx, img);
+    if (img) drawCscImageFitBox(ctx, img);
   }
 }
 

@@ -524,9 +524,31 @@ body {
 /* ===================================
    APPLE-STYLE STACKING CARDS OVERLAP SECTIONS
    =================================== */
+/* LIVE ANIMATED AMBIENT MESH BACKGROUND */
 .scroll-section {
   position: relative;
-  height: 380vh; /* Extended height for long button hold duration */
+  height: 380vh;
+  background: radial-gradient(ellipse at 50% 30%, #fff4ea 0%, #faf8f5 60%, #f4f0eb 100%);
+  overflow: visible;
+}
+
+.scroll-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(230, 92, 0, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(249, 168, 37, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 85%, rgba(18, 140, 126, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ambientMeshGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes ambientMeshGlow {
+  0% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 0.7; transform: scale(1); }
 }
 
 /* STACKING Z-INDEX HIERARCHY */
