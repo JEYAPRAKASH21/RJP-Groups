@@ -39,7 +39,7 @@ preloadCscImages();
 (function () {
   const intro    = document.getElementById('intro-screen');
   const mainSite = document.getElementById('main-site');
-  const INTRO_DURATION = 1600; // ms (Faster, ultra-smooth transition)
+  const INTRO_DURATION = 1400; // ms (Ultra-fast smooth fade)
 
   // Check if intro has already been played during this session / navigation
   if (sessionStorage.getItem('rjp_intro_played') === 'true') {
@@ -54,7 +54,7 @@ preloadCscImages();
     const container = document.getElementById('particles');
     if (!container) return;
     const colors = ['#E65C00', '#FF8C42', '#F9A825'];
-    const pCount = isMobile ? 6 : 10;
+    const pCount = isMobile ? 5 : 8;
     for (let i = 0; i < pCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -62,10 +62,10 @@ preloadCscImages();
         left: ${Math.random() * 100}%;
         bottom: ${Math.random() * 40}%;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
-        width: ${4 + Math.random() * 6}px;
-        height: ${4 + Math.random() * 6}px;
-        --dur: ${1.8 + Math.random() * 2}s;
-        --delay: ${Math.random() * 1.5}s;
+        width: ${4 + Math.random() * 5}px;
+        height: ${4 + Math.random() * 5}px;
+        --dur: ${1.5 + Math.random() * 1.5}s;
+        --delay: ${Math.random() * 1}s;
       `;
       container.appendChild(p);
     }
@@ -74,7 +74,7 @@ preloadCscImages();
 
   setTimeout(function () {
     if (intro) {
-      intro.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      intro.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
       intro.style.opacity = '0';
       intro.style.transform = 'scale(1.02)';
     }
@@ -84,7 +84,7 @@ preloadCscImages();
       document.body.style.overflow = 'auto';
       sessionStorage.setItem('rjp_intro_played', 'true');
       initPage();
-    }, 400);
+    }, 350);
   }, INTRO_DURATION);
 
   document.body.style.overflow = 'hidden';
@@ -114,11 +114,11 @@ function initPage() {
       resizeBuildingCanvas();
       resizeCarCanvas();
       resizeCscCanvas();
-    }, 80);
+    }, 100);
   }, { passive: true });
 }
 
-// ─── UNIVERSAL VIBRANT 2026 HIGH-ENERGY LIVE MOTION BACKGROUND ───────────────
+// ─── STRESS-FREE LIGHTWEIGHT 60FPS LIVE MOTION BACKGROUND ───────────────
 function initGlobalLiveBackground() {
   let canvas = document.getElementById('globalLiveBgCanvas');
   if (!canvas) {
@@ -138,57 +138,45 @@ function initGlobalLiveBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 45 : 110;
+  const particleCount = isMobile ? 12 : 28; // Ultra-lightweight particle count for 0 lag
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 1.4,
-      vy: (Math.random() - 0.5) * 1.4,
-      radius: Math.random() * 4 + 2,
-      alpha: Math.random() * 0.7 + 0.35,
-      color: i % 4 === 0 ? 'rgba(230, 92, 0,' : i % 4 === 1 ? 'rgba(255, 140, 66,' : i % 4 === 2 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8,
+      radius: Math.random() * 3 + 1.5,
+      alpha: Math.random() * 0.5 + 0.25,
+      color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
     });
   }
-
-  let mouseX = width / 2;
-  let mouseY = height / 2;
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  }, { passive: true });
 
   let waveOffset = 0;
 
   function renderBg() {
     ctx.clearRect(0, 0, width, height);
 
-    waveOffset += 0.015;
+    waveOffset += 0.008;
 
-    // 1. DYNAMIC DUAL AMBIENT WAVE GRADIENTS
+    // Smooth ambient wave
     ctx.beginPath();
     ctx.moveTo(0, height * 0.35);
-    for (let x = 0; x <= width; x += 20) {
-      const y = Math.sin(x * 0.003 + waveOffset) * 65 + Math.cos(x * 0.0018 + waveOffset) * 40 + height * 0.35;
+    for (let x = 0; x <= width; x += 35) {
+      const y = Math.sin(x * 0.003 + waveOffset) * 45 + height * 0.35;
       ctx.lineTo(x, y);
     }
     ctx.lineTo(width, height);
     ctx.lineTo(0, height);
     ctx.closePath();
 
-    const grad1 = ctx.createLinearGradient(0, 0, width, height);
-    grad1.addColorStop(0, 'rgba(255, 215, 185, 0.45)');
-    grad1.addColorStop(0.5, 'rgba(255, 235, 205, 0.25)');
-    grad1.addColorStop(1, 'rgba(245, 238, 230, 0.1)');
-    ctx.fillStyle = grad1;
+    const grad = ctx.createLinearGradient(0, 0, width, height);
+    grad.addColorStop(0, 'rgba(255, 220, 195, 0.2)');
+    grad.addColorStop(1, 'rgba(245, 238, 230, 0.03)');
+    ctx.fillStyle = grad;
     ctx.fill();
 
-    // 2. HIGH-VIBRANCY PARTICLES & CONSTELLATIONS
-    ctx.shadowBlur = isMobile ? 0 : 10;
-    ctx.shadowColor = 'rgba(230, 92, 0, 0.7)';
-
+    // Fast particle render
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.x += p.vx;
@@ -197,39 +185,12 @@ function initGlobalLiveBackground() {
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
 
-      // Mouse magnetic interaction
-      const dx = mouseX - p.x;
-      const dy = mouseY - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 180) {
-        p.x += (dx / dist) * 0.6;
-        p.y += (dy / dist) * 0.6;
-      }
-
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
-
-      // Glowing constellation lines
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const pdx = p.x - p2.x;
-        const pdy = p.y - p2.y;
-        const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
-
-        if (pdist < 150) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(230, 92, 0, ${0.35 * (1 - pdist / 150)})`;
-          ctx.lineWidth = 1.3;
-          ctx.stroke();
-        }
-      }
     }
 
-    ctx.shadowBlur = 0;
     requestAnimationFrame(renderBg);
   }
 
@@ -248,10 +209,10 @@ function initHero3dTilt() {
     const mouseX = e.clientX - centerX;
     const mouseY = e.clientY - centerY;
 
-    const rotateX = (-mouseY / (rect.height / 2)) * 10;
-    const rotateY = (mouseX / (rect.width / 2)) * 10;
+    const rotateX = (-mouseY / (rect.height / 2)) * 8;
+    const rotateY = (mouseX / (rect.width / 2)) * 8;
 
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
   }, { passive: true });
 
   card.addEventListener('mouseleave', function () {
@@ -269,7 +230,7 @@ function drawImageFitBox(ctx, img) {
   const imgHeight = img.naturalHeight;
 
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
+  ctx.imageSmoothingQuality = isMobile ? 'medium' : 'high';
 
   // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
@@ -372,7 +333,7 @@ function drawCscImageFitBox(ctx, img) {
   const imgHeight = img.naturalHeight;
 
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
+  ctx.imageSmoothingQuality = isMobile ? 'medium' : 'high';
 
   // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
