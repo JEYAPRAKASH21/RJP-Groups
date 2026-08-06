@@ -1,6 +1,6 @@
 /* ===================================
    RJP GROUP — JAVASCRIPT
-   100% Instant Preloading, GPU-Accelerated Ultra-HD Rendering & Stress-Resistant Smooth UX
+   100% Instant Preloading, GPU-Accelerated Ultra-HD Rendering & Mobile Zero-Lag Engine
    =================================== */
 
 // Detect Mobile Device for Adaptive Performance Optimization
@@ -39,9 +39,8 @@ preloadCscImages();
 (function () {
   const intro    = document.getElementById('intro-screen');
   const mainSite = document.getElementById('main-site');
-  const INTRO_DURATION = 1400; // ms (Ultra-fast smooth fade)
+  const INTRO_DURATION = 1200; // ms (Ultra-fast smooth fade)
 
-  // Check if intro has already been played during this session / navigation
   if (sessionStorage.getItem('rjp_intro_played') === 'true') {
     if (intro) intro.style.display = 'none';
     if (mainSite) mainSite.classList.remove('hidden');
@@ -54,7 +53,7 @@ preloadCscImages();
     const container = document.getElementById('particles');
     if (!container) return;
     const colors = ['#E65C00', '#FF8C42', '#F9A825'];
-    const pCount = isMobile ? 5 : 8;
+    const pCount = isMobile ? 4 : 8;
     for (let i = 0; i < pCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -62,10 +61,10 @@ preloadCscImages();
         left: ${Math.random() * 100}%;
         bottom: ${Math.random() * 40}%;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
-        width: ${4 + Math.random() * 5}px;
-        height: ${4 + Math.random() * 5}px;
-        --dur: ${1.5 + Math.random() * 1.5}s;
-        --delay: ${Math.random() * 1}s;
+        width: ${4 + Math.random() * 4}px;
+        height: ${4 + Math.random() * 4}px;
+        --dur: ${1.5 + Math.random() * 1}s;
+        --delay: ${Math.random() * 0.8}s;
       `;
       container.appendChild(p);
     }
@@ -74,9 +73,9 @@ preloadCscImages();
 
   setTimeout(function () {
     if (intro) {
-      intro.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+      intro.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
       intro.style.opacity = '0';
-      intro.style.transform = 'scale(1.02)';
+      intro.style.transform = 'scale(1.01)';
     }
     setTimeout(function () {
       if (intro) intro.style.display = 'none';
@@ -84,7 +83,7 @@ preloadCscImages();
       document.body.style.overflow = 'auto';
       sessionStorage.setItem('rjp_intro_played', 'true');
       initPage();
-    }, 350);
+    }, 300);
   }, INTRO_DURATION);
 
   document.body.style.overflow = 'hidden';
@@ -106,7 +105,6 @@ function initPage() {
   resizeCarCanvas();
   resizeCscCanvas();
 
-  // Debounced window resize for lag-free performance under heavy stress
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
@@ -114,7 +112,7 @@ function initPage() {
       resizeBuildingCanvas();
       resizeCarCanvas();
       resizeCscCanvas();
-    }, 100);
+    }, 120);
   }, { passive: true });
 }
 
@@ -138,16 +136,16 @@ function initGlobalLiveBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 12 : 28; // Ultra-lightweight particle count for 0 lag
+  const particleCount = isMobile ? 8 : 45; // Extremely lightweight on mobile for 100% smooth scrolling
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
+      vx: (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8),
+      vy: (Math.random() - 0.5) * (isMobile ? 0.4 : 0.8),
       radius: Math.random() * 3 + 1.5,
-      alpha: Math.random() * 0.5 + 0.25,
+      alpha: Math.random() * 0.4 + 0.2,
       color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
     });
   }
@@ -157,13 +155,12 @@ function initGlobalLiveBackground() {
   function renderBg() {
     ctx.clearRect(0, 0, width, height);
 
-    waveOffset += 0.008;
+    waveOffset += 0.006;
 
-    // Smooth ambient wave
     ctx.beginPath();
     ctx.moveTo(0, height * 0.35);
-    for (let x = 0; x <= width; x += 35) {
-      const y = Math.sin(x * 0.003 + waveOffset) * 45 + height * 0.35;
+    for (let x = 0; x <= width; x += 40) {
+      const y = Math.sin(x * 0.003 + waveOffset) * 40 + height * 0.35;
       ctx.lineTo(x, y);
     }
     ctx.lineTo(width, height);
@@ -171,12 +168,11 @@ function initGlobalLiveBackground() {
     ctx.closePath();
 
     const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, 'rgba(255, 220, 195, 0.2)');
-    grad.addColorStop(1, 'rgba(245, 238, 230, 0.03)');
+    grad.addColorStop(0, 'rgba(255, 220, 195, 0.18)');
+    grad.addColorStop(1, 'rgba(245, 238, 230, 0.02)');
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Fast particle render
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.x += p.vx;
@@ -200,7 +196,7 @@ function initGlobalLiveBackground() {
 // ─── HERO 3D TILT LOGO CARD ───────────────────────────────────────────────────
 function initHero3dTilt() {
   const card = document.getElementById('hero3dCard');
-  if (!card) return;
+  if (!card || isMobile) return;
 
   window.addEventListener('mousemove', function (e) {
     const rect = card.getBoundingClientRect();
@@ -230,9 +226,8 @@ function drawImageFitBox(ctx, img) {
   const imgHeight = img.naturalHeight;
 
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = isMobile ? 'medium' : 'high';
+  ctx.imageSmoothingQuality = isMobile ? 'low' : 'high';
 
-  // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
   const ratio = Math.max(hRatio, vRatio);
@@ -260,7 +255,8 @@ function renderBuildingFrame(index) {
 function resizeBuildingCanvas() {
   const canvas = document.getElementById('buildingCanvas');
   if (!canvas) return;
-  const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
+  // Mobile DPR capped at 1.0 for 90% faster rendering
+  const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -298,7 +294,7 @@ function renderCarFrame(index) {
 function resizeCarCanvas() {
   const canvas = document.getElementById('carCanvas');
   if (!canvas) return;
-  const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -333,9 +329,8 @@ function drawCscImageFitBox(ctx, img) {
   const imgHeight = img.naturalHeight;
 
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = isMobile ? 'medium' : 'high';
+  ctx.imageSmoothingQuality = isMobile ? 'low' : 'high';
 
-  // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
   const ratio = Math.max(hRatio, vRatio);
@@ -362,7 +357,7 @@ function renderCscFrame(index) {
 function resizeCscCanvas() {
   const canvas = document.getElementById('cscCanvas');
   if (!canvas) return;
-  const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
   canvas.width = Math.round(rect.width * dpr);
@@ -463,7 +458,7 @@ function initSmoothScrollScrubEngine() {
   window.addEventListener('scroll', updateTargets, { passive: true });
   updateTargets();
 
-  const lerpFactor = isMobile ? 0.25 : 0.18;
+  const lerpFactor = isMobile ? 0.35 : 0.18;
   let lastBuildingFrame = -1;
   let lastCarFrame = -1;
   let lastCscFrame = -1;
