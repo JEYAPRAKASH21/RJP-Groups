@@ -528,7 +528,7 @@ body {
 .scroll-section {
   position: relative;
   height: 380vh;
-  background: radial-gradient(ellipse at 50% 30%, #fff4ea 0%, #faf8f5 60%, #f4f0eb 100%);
+  background: transparent !important;
   overflow: visible;
 }
 
