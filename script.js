@@ -1,6 +1,6 @@
 /* ===================================
    RJP GROUP — JAVASCRIPT
-   100% Instant Preloading, Mobile-Adaptive DPR & Lag-Free 60FPS Performance Engine
+   100% Instant Preloading, GPU-Accelerated Ultra-HD Rendering & Stress-Resistant Smooth UX
    =================================== */
 
 // Detect Mobile Device for Adaptive Performance Optimization
@@ -35,11 +35,11 @@ preloadBuildingImages();
 preloadCarImages();
 preloadCscImages();
 
-// ─── INTRO ANIMATION (PLAYS ONLY ON INITIAL SITE OPENING) ────────────────────
+// ─── INTRO ANIMATION (FAST, ZERO-LAG & SMOOTH FADE) ─────────────────────────
 (function () {
   const intro    = document.getElementById('intro-screen');
   const mainSite = document.getElementById('main-site');
-  const INTRO_DURATION = 2800; // ms
+  const INTRO_DURATION = 1600; // ms (Faster, ultra-smooth transition)
 
   // Check if intro has already been played during this session / navigation
   if (sessionStorage.getItem('rjp_intro_played') === 'true') {
@@ -53,8 +53,8 @@ preloadCscImages();
   function spawnParticles() {
     const container = document.getElementById('particles');
     if (!container) return;
-    const colors = ['#E65C00', '#FF8C42', '#F9A825', '#FFD580', '#FF6B35'];
-    const pCount = isMobile ? 12 : 28; // Reduced particle count on mobile for zero lag
+    const colors = ['#E65C00', '#FF8C42', '#F9A825'];
+    const pCount = isMobile ? 6 : 10; // Lightweight particle count for 0 lag
     for (let i = 0; i < pCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -62,10 +62,10 @@ preloadCscImages();
         left: ${Math.random() * 100}%;
         bottom: ${Math.random() * 40}%;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
-        width: ${4 + Math.random() * 8}px;
-        height: ${4 + Math.random() * 8}px;
-        --dur: ${2 + Math.random() * 3}s;
-        --delay: ${Math.random() * 2}s;
+        width: ${4 + Math.random() * 6}px;
+        height: ${4 + Math.random() * 6}px;
+        --dur: ${1.8 + Math.random() * 2}s;
+        --delay: ${Math.random() * 1.5}s;
       `;
       container.appendChild(p);
     }
@@ -74,9 +74,9 @@ preloadCscImages();
 
   setTimeout(function () {
     if (intro) {
-      intro.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+      intro.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
       intro.style.opacity = '0';
-      intro.style.transform = 'scale(1.05)';
+      intro.style.transform = 'scale(1.02)';
     }
     setTimeout(function () {
       if (intro) intro.style.display = 'none';
@@ -84,7 +84,7 @@ preloadCscImages();
       document.body.style.overflow = 'auto';
       sessionStorage.setItem('rjp_intro_played', 'true');
       initPage();
-    }, 700);
+    }, 400);
   }, INTRO_DURATION);
 
   document.body.style.overflow = 'hidden';
@@ -114,7 +114,7 @@ function initPage() {
       resizeBuildingCanvas();
       resizeCarCanvas();
       resizeCscCanvas();
-    }, 100);
+    }, 80);
   }, { passive: true });
 }
 
@@ -133,7 +133,7 @@ function initLiveHeroBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 20 : Math.min(60, Math.floor(width / 25));
+  const particleCount = isMobile ? 16 : Math.min(40, Math.floor(width / 35));
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
@@ -163,7 +163,7 @@ function initLiveHeroBackground() {
     waveOffset += 0.01;
     ctx.beginPath();
     ctx.moveTo(0, height * 0.5);
-    for (let x = 0; x <= width; x += 20) {
+    for (let x = 0; x <= width; x += 25) {
       const y = Math.sin(x * 0.004 + waveOffset) * 45 + Math.cos(x * 0.002 + waveOffset) * 25 + height * 0.5;
       ctx.lineTo(x, y);
     }
@@ -177,7 +177,7 @@ function initLiveHeroBackground() {
     ctx.fillStyle = grad;
     ctx.fill();
 
-    ctx.shadowBlur = isMobile ? 0 : 15;
+    ctx.shadowBlur = isMobile ? 0 : 12;
     ctx.shadowColor = 'rgba(230, 92, 0, 0.8)';
 
     for (let i = 0; i < particles.length; i++) {
@@ -188,34 +188,10 @@ function initLiveHeroBackground() {
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
 
-      const dx = mouseX - p.x;
-      const dy = mouseY - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 180) {
-        p.x += (dx / dist) * 0.4;
-        p.y += (dy / dist) * 0.4;
-      }
-
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
-
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const pdx = p.x - p2.x;
-        const pdy = p.y - p2.y;
-        const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
-
-        if (pdist < 140) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(230, 92, 0, ${0.25 * (1 - pdist / 140)})`;
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-        }
-      }
     }
 
     ctx.shadowBlur = 0;
@@ -237,10 +213,10 @@ function initHero3dTilt() {
     const mouseX = e.clientX - centerX;
     const mouseY = e.clientY - centerY;
 
-    const rotateX = (-mouseY / (rect.height / 2)) * 12;
-    const rotateY = (mouseX / (rect.width / 2)) * 12;
+    const rotateX = (-mouseY / (rect.height / 2)) * 10;
+    const rotateY = (mouseX / (rect.width / 2)) * 10;
 
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
   }, { passive: true });
 
   card.addEventListener('mouseleave', function () {
@@ -248,7 +224,7 @@ function initHero3dTilt() {
   });
 }
 
-// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% UNCROPPED FIT) ───
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% EDGE-TO-EDGE FIT) ───
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
@@ -260,10 +236,10 @@ function drawImageFitBox(ctx, img) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Contain math: guarantees 100% of the image (roof, wheels, edges) fits cleanly without cropping
+  // Scaled fit math matching 16:9 container perfectly with zero sidebars
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
-  const ratio = Math.min(hRatio, vRatio);
+  const ratio = Math.max(hRatio, vRatio);
 
   const drawWidth = Math.ceil(imgWidth * ratio);
   const drawHeight = Math.ceil(imgHeight * ratio);
@@ -288,7 +264,6 @@ function renderBuildingFrame(index) {
 function resizeBuildingCanvas() {
   const canvas = document.getElementById('buildingCanvas');
   if (!canvas) return;
-  // Adaptive DPR: 1.25 on mobile for 70% faster GPU rendering, 2 on desktop for Retina crispness
   const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
@@ -327,7 +302,6 @@ function renderCarFrame(index) {
 function resizeCarCanvas() {
   const canvas = document.getElementById('carCanvas');
   if (!canvas) return;
-  // Adaptive DPR: 1.25 on mobile, 2 on desktop
   const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
@@ -366,7 +340,6 @@ function renderCscFrame(index) {
 function resizeCscCanvas() {
   const canvas = document.getElementById('cscCanvas');
   if (!canvas) return;
-  // Adaptive DPR: 1.25 on mobile, 2 on desktop
   const dpr = isMobile ? 1.25 : Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement.getBoundingClientRect();
   if (rect.width === 0 || rect.height === 0) return;
@@ -392,7 +365,7 @@ function preloadCscImages() {
   }
 }
 
-// ─── 5. STRESS-RESISTANT CARD STACKING & SILKY WEIGHTED LERP SCRUB ENGINE ─────────
+// ─── 5. CARD STACKING OVERLAP & SMOOTH SCRUB ENGINE ─────────────────────────
 function initSmoothScrollScrubEngine() {
   function updateTargets() {
     // 1. CONSTRUCTION SCRUB
@@ -468,24 +441,38 @@ function initSmoothScrollScrubEngine() {
   window.addEventListener('scroll', updateTargets, { passive: true });
   updateTargets();
 
-  // Adaptive Lerp factor: faster touch fling response on mobile (0.28), smooth weighted lerp on desktop (0.15)
-  const lerpFactor = isMobile ? 0.28 : 0.15;
+  const lerpFactor = isMobile ? 0.25 : 0.18;
+  let lastBuildingFrame = -1;
+  let lastCarFrame = -1;
+  let lastCscFrame = -1;
 
-  // Continuous Silky Weighted 60FPS Lerp Loop for Zero-Jitter Ultra-Smooth Animation
+  // Render ONLY when frame index actually changes to prevent CPU/GPU overload
   function smoothLerpLoop() {
-    if (Math.abs(targetBuildingFrameIndex - currentBuildingFrameIndex) > 0.005) {
+    if (Math.abs(targetBuildingFrameIndex - currentBuildingFrameIndex) > 0.001) {
       currentBuildingFrameIndex += (targetBuildingFrameIndex - currentBuildingFrameIndex) * lerpFactor;
-      renderBuildingFrame(Math.round(currentBuildingFrameIndex));
+      const rounded = Math.round(currentBuildingFrameIndex);
+      if (rounded !== lastBuildingFrame) {
+        lastBuildingFrame = rounded;
+        renderBuildingFrame(rounded);
+      }
     }
 
-    if (Math.abs(targetCarFrameIndex - currentCarFrameIndex) > 0.005) {
+    if (Math.abs(targetCarFrameIndex - currentCarFrameIndex) > 0.001) {
       currentCarFrameIndex += (targetCarFrameIndex - currentCarFrameIndex) * lerpFactor;
-      renderCarFrame(Math.round(currentCarFrameIndex));
+      const rounded = Math.round(currentCarFrameIndex);
+      if (rounded !== lastCarFrame) {
+        lastCarFrame = rounded;
+        renderCarFrame(rounded);
+      }
     }
 
-    if (Math.abs(targetCscFrameIndex - currentCscFrameIndex) > 0.005) {
+    if (Math.abs(targetCscFrameIndex - currentCscFrameIndex) > 0.001) {
       currentCscFrameIndex += (targetCscFrameIndex - currentCscFrameIndex) * lerpFactor;
-      renderCscFrame(Math.round(currentCscFrameIndex));
+      const rounded = Math.round(currentCscFrameIndex);
+      if (rounded !== lastCscFrame) {
+        lastCscFrame = rounded;
+        renderCscFrame(rounded);
+      }
     }
 
     requestAnimationFrame(smoothLerpLoop);
