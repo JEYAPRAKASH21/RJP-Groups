@@ -118,7 +118,7 @@ function initPage() {
   }, { passive: true });
 }
 
-// ─── UNIVERSAL TRENDING 2026 LUXURY MOTION LIVE BACKGROUND FOR ALL PAGES ─────
+// ─── UNIVERSAL VIBRANT 2026 HIGH-ENERGY LIVE MOTION BACKGROUND ───────────────
 function initGlobalLiveBackground() {
   let canvas = document.getElementById('globalLiveBgCanvas');
   if (!canvas) {
@@ -138,16 +138,16 @@ function initGlobalLiveBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 35 : 85;
+  const particleCount = isMobile ? 45 : 110;
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 1.1,
-      vy: (Math.random() - 0.5) * 1.1,
-      radius: Math.random() * 3.5 + 1.5,
-      alpha: Math.random() * 0.6 + 0.3,
+      vx: (Math.random() - 0.5) * 1.4,
+      vy: (Math.random() - 0.5) * 1.4,
+      radius: Math.random() * 4 + 2,
+      alpha: Math.random() * 0.7 + 0.35,
       color: i % 4 === 0 ? 'rgba(230, 92, 0,' : i % 4 === 1 ? 'rgba(255, 140, 66,' : i % 4 === 2 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
     });
   }
@@ -165,13 +165,13 @@ function initGlobalLiveBackground() {
   function renderBg() {
     ctx.clearRect(0, 0, width, height);
 
-    waveOffset += 0.012;
+    waveOffset += 0.015;
 
-    // 1. DUAL FLUID AURORA WAVE
+    // 1. DYNAMIC DUAL AMBIENT WAVE GRADIENTS
     ctx.beginPath();
     ctx.moveTo(0, height * 0.35);
     for (let x = 0; x <= width; x += 20) {
-      const y = Math.sin(x * 0.003 + waveOffset) * 55 + Math.cos(x * 0.0018 + waveOffset) * 35 + height * 0.35;
+      const y = Math.sin(x * 0.003 + waveOffset) * 65 + Math.cos(x * 0.0018 + waveOffset) * 40 + height * 0.35;
       ctx.lineTo(x, y);
     }
     ctx.lineTo(width, height);
@@ -179,32 +179,15 @@ function initGlobalLiveBackground() {
     ctx.closePath();
 
     const grad1 = ctx.createLinearGradient(0, 0, width, height);
-    grad1.addColorStop(0, 'rgba(255, 220, 195, 0.28)');
-    grad1.addColorStop(0.5, 'rgba(255, 240, 220, 0.14)');
-    grad1.addColorStop(1, 'rgba(245, 238, 230, 0.05)');
+    grad1.addColorStop(0, 'rgba(255, 215, 185, 0.45)');
+    grad1.addColorStop(0.5, 'rgba(255, 235, 205, 0.25)');
+    grad1.addColorStop(1, 'rgba(245, 238, 230, 0.1)');
     ctx.fillStyle = grad1;
     ctx.fill();
 
-    // 2. SECONDARY COUNTER WAVE
-    ctx.beginPath();
-    ctx.moveTo(0, height * 0.65);
-    for (let x = 0; x <= width; x += 25) {
-      const y = Math.cos(x * 0.0025 - waveOffset) * 45 + Math.sin(x * 0.0012 + waveOffset) * 30 + height * 0.65;
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
-    ctx.closePath();
-
-    const grad2 = ctx.createLinearGradient(width, 0, 0, height);
-    grad2.addColorStop(0, 'rgba(255, 210, 180, 0.18)');
-    grad2.addColorStop(1, 'rgba(255, 245, 235, 0.02)');
-    ctx.fillStyle = grad2;
-    ctx.fill();
-
-    // 3. INTERACTIVE CONSTELLATION PARTICLES & MOUSE REACTION
-    ctx.shadowBlur = isMobile ? 0 : 8;
-    ctx.shadowColor = 'rgba(230, 92, 0, 0.6)';
+    // 2. HIGH-VIBRANCY PARTICLES & CONSTELLATIONS
+    ctx.shadowBlur = isMobile ? 0 : 10;
+    ctx.shadowColor = 'rgba(230, 92, 0, 0.7)';
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
@@ -218,9 +201,9 @@ function initGlobalLiveBackground() {
       const dx = mouseX - p.x;
       const dy = mouseY - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 170) {
-        p.x += (dx / dist) * 0.5;
-        p.y += (dy / dist) * 0.5;
+      if (dist < 180) {
+        p.x += (dx / dist) * 0.6;
+        p.y += (dy / dist) * 0.6;
       }
 
       ctx.beginPath();
@@ -228,19 +211,19 @@ function initGlobalLiveBackground() {
       ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
 
-      // Constellation web lines
+      // Glowing constellation lines
       for (let j = i + 1; j < particles.length; j++) {
         const p2 = particles[j];
         const pdx = p.x - p2.x;
         const pdy = p.y - p2.y;
         const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
 
-        if (pdist < 140) {
+        if (pdist < 150) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(230, 92, 0, ${0.22 * (1 - pdist / 140)})`;
-          ctx.lineWidth = 1.1;
+          ctx.strokeStyle = `rgba(230, 92, 0, ${0.35 * (1 - pdist / 150)})`;
+          ctx.lineWidth = 1.3;
           ctx.stroke();
         }
       }
