@@ -847,6 +847,26 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  .scroll-section {
+    height: 250vh; /* Shorter scroll height for effortless touch swipes on mobile */
+  }
+
+  #travels, #csc {
+    margin-top: -70vh;
+  }
+
+  .sticky-wrapper {
+    top: 75px;
+    height: calc(100vh - 95px);
+  }
+
+  .boxed-container {
+    width: 94vw;
+    border-radius: 20px;
+    max-height: 520px;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
   .nav-links {
     display: none;
     flex-direction: column;
