@@ -54,7 +54,7 @@ preloadCscImages();
     const container = document.getElementById('particles');
     if (!container) return;
     const colors = ['#E65C00', '#FF8C42', '#F9A825'];
-    const pCount = isMobile ? 6 : 10; // Lightweight particle count for 0 lag
+    const pCount = isMobile ? 6 : 10;
     for (let i = 0; i < pCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -93,6 +93,7 @@ preloadCscImages();
 // ─── INIT PAGE COMPONENTS ───────────────────────────────────────────────────
 function initPage() {
   initLiveHeroBackground();
+  initLiveScrollBackground();
   initHero3dTilt();
   initNavbar();
   initSmoothScrollScrubEngine();
@@ -116,6 +117,87 @@ function initPage() {
       resizeCscCanvas();
     }, 80);
   }, { passive: true });
+}
+
+// ─── DYNAMIC LIVE SCROLL BACKGROUND ANIMATION ─────────────────────────
+function initLiveScrollBackground() {
+  const container = document.querySelector('.scroll-section');
+  if (!container) return;
+
+  let canvas = document.getElementById('scrollBgCanvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'scrollBgCanvas';
+    canvas.className = 'scroll-bg-canvas';
+    container.insertBefore(canvas, container.firstChild);
+  }
+
+  const ctx = canvas.getContext('2d');
+  let width = (canvas.width = container.clientWidth || window.innerWidth);
+  let height = (canvas.height = container.clientHeight || window.innerHeight * 3);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = container.clientWidth || window.innerWidth;
+    height = canvas.height = container.clientHeight || window.innerHeight * 3;
+  }, { passive: true });
+
+  const particles = [];
+  const particleCount = isMobile ? 25 : 55;
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      radius: Math.random() * 3 + 1.5,
+      alpha: Math.random() * 0.5 + 0.25,
+      color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
+    });
+  }
+
+  let waveOffset = 0;
+
+  function renderScrollBg() {
+    ctx.clearRect(0, 0, width, height);
+
+    waveOffset += 0.008;
+
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.2);
+    for (let x = 0; x <= width; x += 30) {
+      const y = Math.sin(x * 0.003 + waveOffset) * 60 + Math.cos(x * 0.001 + waveOffset) * 40 + height * 0.2;
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.closePath();
+
+    const grad = ctx.createLinearGradient(0, 0, width, height);
+    grad.addColorStop(0, 'rgba(255, 235, 215, 0.25)');
+    grad.addColorStop(0.5, 'rgba(255, 245, 230, 0.15)');
+    grad.addColorStop(1, 'rgba(245, 240, 235, 0.05)');
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.alpha + ')';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(renderScrollBg);
+  }
+
+  renderScrollBg();
 }
 
 // ─── 1. DYNAMIC LIVE ANIMATED BACKGROUND BEHIND LOGO ─────────────────────────
@@ -224,7 +306,7 @@ function initHero3dTilt() {
   });
 }
 
-// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% EDGE-TO-EDGE FIT) ───
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% COVER EDGE-TO-EDGE FIT) ───
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
@@ -236,7 +318,7 @@ function drawImageFitBox(ctx, img) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Scaled fit math matching 16:9 container perfectly with zero sidebars
+  // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
   const ratio = Math.max(hRatio, vRatio);
@@ -339,10 +421,10 @@ function drawCscImageFitBox(ctx, img) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Contain math: guarantees 100% of the left wall CSC text is completely visible without cutoff!
+  // Cover math: fills 100% of the box edge-to-edge with ZERO black background!
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
-  const ratio = Math.min(hRatio, vRatio);
+  const ratio = Math.max(hRatio, vRatio);
 
   const drawWidth = Math.ceil(imgWidth * ratio);
   const drawHeight = Math.ceil(imgHeight * ratio);
