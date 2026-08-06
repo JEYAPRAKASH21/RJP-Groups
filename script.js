@@ -118,7 +118,7 @@ function initPage() {
   }, { passive: true });
 }
 
-// ─── UNIVERSAL GLOBAL LIVE ANIMATED BACKGROUND FOR ALL SECTIONS ─────────────
+// ─── UNIVERSAL TRENDING 2026 LUXURY MOTION LIVE BACKGROUND FOR ALL PAGES ─────
 function initGlobalLiveBackground() {
   let canvas = document.getElementById('globalLiveBgCanvas');
   if (!canvas) {
@@ -138,17 +138,17 @@ function initGlobalLiveBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 30 : 65;
+  const particleCount = isMobile ? 35 : 85;
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.7,
-      vy: (Math.random() - 0.5) * 0.7,
-      radius: Math.random() * 3 + 1.5,
-      alpha: Math.random() * 0.5 + 0.25,
-      color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
+      vx: (Math.random() - 0.5) * 1.1,
+      vy: (Math.random() - 0.5) * 1.1,
+      radius: Math.random() * 3.5 + 1.5,
+      alpha: Math.random() * 0.6 + 0.3,
+      color: i % 4 === 0 ? 'rgba(230, 92, 0,' : i % 4 === 1 ? 'rgba(255, 140, 66,' : i % 4 === 2 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
     });
   }
 
@@ -165,27 +165,47 @@ function initGlobalLiveBackground() {
   function renderBg() {
     ctx.clearRect(0, 0, width, height);
 
-    waveOffset += 0.008;
+    waveOffset += 0.012;
 
-    // Ambient luminous wave
+    // 1. DUAL FLUID AURORA WAVE
     ctx.beginPath();
-    ctx.moveTo(0, height * 0.3);
-    for (let x = 0; x <= width; x += 30) {
-      const y = Math.sin(x * 0.003 + waveOffset) * 50 + Math.cos(x * 0.0015 + waveOffset) * 35 + height * 0.3;
+    ctx.moveTo(0, height * 0.35);
+    for (let x = 0; x <= width; x += 20) {
+      const y = Math.sin(x * 0.003 + waveOffset) * 55 + Math.cos(x * 0.0018 + waveOffset) * 35 + height * 0.35;
       ctx.lineTo(x, y);
     }
     ctx.lineTo(width, height);
     ctx.lineTo(0, height);
     ctx.closePath();
 
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, 'rgba(255, 235, 215, 0.2)');
-    grad.addColorStop(0.5, 'rgba(255, 245, 230, 0.1)');
-    grad.addColorStop(1, 'rgba(245, 240, 235, 0.04)');
-    ctx.fillStyle = grad;
+    const grad1 = ctx.createLinearGradient(0, 0, width, height);
+    grad1.addColorStop(0, 'rgba(255, 220, 195, 0.28)');
+    grad1.addColorStop(0.5, 'rgba(255, 240, 220, 0.14)');
+    grad1.addColorStop(1, 'rgba(245, 238, 230, 0.05)');
+    ctx.fillStyle = grad1;
     ctx.fill();
 
-    // Particles + Constellations
+    // 2. SECONDARY COUNTER WAVE
+    ctx.beginPath();
+    ctx.moveTo(0, height * 0.65);
+    for (let x = 0; x <= width; x += 25) {
+      const y = Math.cos(x * 0.0025 - waveOffset) * 45 + Math.sin(x * 0.0012 + waveOffset) * 30 + height * 0.65;
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
+    ctx.closePath();
+
+    const grad2 = ctx.createLinearGradient(width, 0, 0, height);
+    grad2.addColorStop(0, 'rgba(255, 210, 180, 0.18)');
+    grad2.addColorStop(1, 'rgba(255, 245, 235, 0.02)');
+    ctx.fillStyle = grad2;
+    ctx.fill();
+
+    // 3. INTERACTIVE CONSTELLATION PARTICLES & MOUSE REACTION
+    ctx.shadowBlur = isMobile ? 0 : 8;
+    ctx.shadowColor = 'rgba(230, 92, 0, 0.6)';
+
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.x += p.vx;
@@ -194,13 +214,13 @@ function initGlobalLiveBackground() {
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
 
-      // Mouse repulsion/attraction
+      // Mouse magnetic interaction
       const dx = mouseX - p.x;
       const dy = mouseY - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 150) {
-        p.x += (dx / dist) * 0.3;
-        p.y += (dy / dist) * 0.3;
+      if (dist < 170) {
+        p.x += (dx / dist) * 0.5;
+        p.y += (dy / dist) * 0.5;
       }
 
       ctx.beginPath();
@@ -208,23 +228,25 @@ function initGlobalLiveBackground() {
       ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
 
+      // Constellation web lines
       for (let j = i + 1; j < particles.length; j++) {
         const p2 = particles[j];
         const pdx = p.x - p2.x;
         const pdy = p.y - p2.y;
         const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
 
-        if (pdist < 130) {
+        if (pdist < 140) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(230, 92, 0, ${0.18 * (1 - pdist / 130)})`;
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = `rgba(230, 92, 0, ${0.22 * (1 - pdist / 140)})`;
+          ctx.lineWidth = 1.1;
           ctx.stroke();
         }
       }
     }
 
+    ctx.shadowBlur = 0;
     requestAnimationFrame(renderBg);
   }
 
