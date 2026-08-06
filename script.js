@@ -54,7 +54,7 @@ preloadCscImages();
     const container = document.getElementById('particles');
     if (!container) return;
     const colors = ['#E65C00', '#FF8C42', '#F9A825'];
-    const pCount = isMobile ? 6 : 10; // Lightweight particle count for 0 lag
+    const pCount = isMobile ? 6 : 10;
     for (let i = 0; i < pCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -224,7 +224,7 @@ function initHero3dTilt() {
   });
 }
 
-// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% EDGE-TO-EDGE FIT) ───
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% COVER FIT) ───
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
@@ -236,7 +236,6 @@ function drawImageFitBox(ctx, img) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Scaled fit math matching 16:9 container perfectly with zero sidebars
   const hRatio = cWidth / imgWidth;
   const vRatio = cHeight / imgHeight;
   const ratio = Math.max(hRatio, vRatio);
@@ -365,76 +364,78 @@ function preloadCscImages() {
   }
 }
 
-// ─── 5. CARD STACKING OVERLAP & SMOOTH SCRUB ENGINE ─────────────────────────
+// ─── 5. ZERO-OVERLAP 3D SCALING SCROLL ENGINE ─────────────────────────
 function initSmoothScrollScrubEngine() {
   function updateTargets() {
+    const vh = window.innerHeight;
+
     // 1. CONSTRUCTION SCRUB
     const constSec = document.getElementById('construction');
     if (constSec) {
       const rect = constSec.getBoundingClientRect();
-      const scrollableDist = rect.height - window.innerHeight;
-      let rawProgress = -rect.top / (scrollableDist * 0.38);
-      let progress = Math.max(0, Math.min(1, rawProgress));
-
+      const card = constSec.querySelector('.boxed-container');
+      let progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
       targetBuildingFrameIndex = Math.min(
         TOTAL_BUILDING_FRAMES - 1,
         Math.floor(progress * (TOTAL_BUILDING_FRAMES - 1))
       );
 
-      const ctaWrap = document.getElementById('buildingCtaWrap');
-      if (ctaWrap) {
-        if (progress >= 0.95) {
-          ctaWrap.classList.add('visible');
+      if (card) {
+        if (rect.top < vh * 0.85 && rect.bottom > vh * 0.15) {
+          card.classList.add('active-in-view');
         } else {
-          ctaWrap.classList.remove('visible');
+          card.classList.remove('active-in-view');
         }
       }
+
+      const ctaWrap = document.getElementById('buildingCtaWrap');
+      if (ctaWrap) ctaWrap.classList.add('visible');
     }
 
     // 2. TRAVELS SCRUB
     const travelSec = document.getElementById('travels');
     if (travelSec) {
       const rect = travelSec.getBoundingClientRect();
-      const scrollableDist = rect.height - window.innerHeight;
-      let rawProgress = -rect.top / (scrollableDist * 0.38);
-      let progress = Math.max(0, Math.min(1, rawProgress));
-
+      const card = travelSec.querySelector('.boxed-container');
+      let progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
       targetCarFrameIndex = Math.min(
         TOTAL_CAR_FRAMES - 1,
         Math.floor(progress * (TOTAL_CAR_FRAMES - 1))
       );
 
-      const ctaWrap = document.getElementById('carCtaWrap');
-      if (ctaWrap) {
-        if (progress >= 0.95) {
-          ctaWrap.classList.add('visible');
+      if (card) {
+        if (rect.top < vh * 0.85 && rect.bottom > vh * 0.15) {
+          card.classList.add('active-in-view');
         } else {
-          ctaWrap.classList.remove('visible');
+          card.classList.remove('active-in-view');
         }
       }
+
+      const ctaWrap = document.getElementById('carCtaWrap');
+      if (ctaWrap) ctaWrap.classList.add('visible');
     }
 
     // 3. CSC CENTER SCRUB
     const cscSec = document.getElementById('csc');
     if (cscSec) {
       const rect = cscSec.getBoundingClientRect();
-      const scrollableDist = rect.height - window.innerHeight;
-      let rawProgress = -rect.top / (scrollableDist * 0.38);
-      let progress = Math.max(0, Math.min(1, rawProgress));
-
+      const card = cscSec.querySelector('.boxed-container');
+      let progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
       targetCscFrameIndex = Math.min(
         TOTAL_CSC_FRAMES - 1,
         Math.floor(progress * (TOTAL_CSC_FRAMES - 1))
       );
 
-      const ctaWrap = document.getElementById('cscCtaWrap');
-      if (ctaWrap) {
-        if (progress >= 0.95) {
-          ctaWrap.classList.add('visible');
+      if (card) {
+        if (rect.top < vh * 0.85 && rect.bottom > vh * 0.15) {
+          card.classList.add('active-in-view');
         } else {
-          ctaWrap.classList.remove('visible');
+          card.classList.remove('active-in-view');
         }
       }
+
+      const ctaWrap = document.getElementById('cscCtaWrap');
+      if (ctaWrap) ctaWrap.classList.add('visible');
     }
   }
 
@@ -536,11 +537,11 @@ function initSmoothScroll() {
         if (targetId === '#home') {
           top = 0;
         } else if (targetId === '#construction') {
-          top = target.offsetTop + 20;
+          top = target.offsetTop - 40;
         } else if (targetId === '#travels') {
-          top = target.offsetTop + 20;
+          top = target.offsetTop - 40;
         } else if (targetId === '#csc') {
-          top = target.offsetTop + 20;
+          top = target.offsetTop - 40;
         } else if (targetId === '#contact') {
           top = target.offsetTop - 70;
         }
@@ -555,7 +556,7 @@ function initSmoothScroll() {
     setTimeout(() => {
       const target = document.querySelector(window.location.hash);
       if (target) {
-        let top = target.offsetTop + 20;
+        let top = target.offsetTop - 40;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     }, 300);
