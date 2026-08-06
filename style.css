@@ -494,49 +494,50 @@ body {
   flex-wrap: wrap;
 }
 
-/* BOLD & VIBRANT FLOATING SCROLL BADGE */
-.hero-scroll-badge {
-  display: inline-flex;
+/* ELEGANT TYPOGRAPHY SCROLL TEXT (NO EMOJIS, NO BUTTON) */
+.hero-scroll-text {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 14px;
-  padding: 12px 28px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid #E65C00;
-  border-radius: 99px;
-  color: #E65C00;
+  margin-top: 24px;
   text-decoration: none;
-  font-size: 13.5px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  box-shadow: 0 10px 30px rgba(230, 92, 0, 0.28);
-  animation: badgeBounce 2s infinite ease-in-out;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+  cursor: pointer;
   z-index: 10;
+  transition: transform 0.3s ease;
 }
 
-.hero-scroll-badge:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 16px 45px rgba(230, 92, 0, 0.45);
-  background: linear-gradient(135deg, #E65C00, #FF8C42);
-  color: #FFFFFF;
+.hero-scroll-text:hover {
+  transform: translateY(3px);
 }
 
-.badge-icon {
-  font-size: 18px;
-  animation: pulseHand 1.5s infinite alternate;
+.hero-scroll-text span {
+  font-family: 'Outfit', sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #E65C00;
+  text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(230, 92, 0, 0.25);
+  animation: textPulse 2.5s infinite ease-in-out;
 }
 
-@keyframes badgeBounce {
-  0%, 100% { transform: translateY(0); box-shadow: 0 10px 30px rgba(230, 92, 0, 0.28); }
-  50% { transform: translateY(-8px); box-shadow: 0 18px 45px rgba(230, 92, 0, 0.45); }
+.scroll-down-line {
+  width: 2.5px;
+  height: 28px;
+  background: linear-gradient(to bottom, #E65C00, rgba(230, 92, 0, 0));
+  border-radius: 99px;
+  animation: linePulse 1.8s infinite ease-in-out;
 }
 
-@keyframes pulseHand {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(4px); }
+@keyframes textPulse {
+  0%, 100% { opacity: 0.85; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+@keyframes linePulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1.25); }
 }
 
 /* ===================================
