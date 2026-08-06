@@ -92,8 +92,7 @@ preloadCscImages();
 
 // ─── INIT PAGE COMPONENTS ───────────────────────────────────────────────────
 function initPage() {
-  initLiveHeroBackground();
-  initLiveScrollBackground();
+  initGlobalLiveBackground();
   initHero3dTilt();
   initNavbar();
   initSmoothScrollScrubEngine();
@@ -119,93 +118,17 @@ function initPage() {
   }, { passive: true });
 }
 
-// ─── DYNAMIC LIVE SCROLL BACKGROUND ANIMATION ─────────────────────────
-function initLiveScrollBackground() {
-  const container = document.querySelector('.scroll-section');
-  if (!container) return;
-
-  let canvas = document.getElementById('scrollBgCanvas');
+// ─── UNIVERSAL GLOBAL LIVE ANIMATED BACKGROUND FOR ALL SECTIONS ─────────────
+function initGlobalLiveBackground() {
+  let canvas = document.getElementById('globalLiveBgCanvas');
   if (!canvas) {
     canvas = document.createElement('canvas');
-    canvas.id = 'scrollBgCanvas';
-    canvas.className = 'scroll-bg-canvas';
-    container.insertBefore(canvas, container.firstChild);
+    canvas.id = 'globalLiveBgCanvas';
+    canvas.className = 'global-live-bg-canvas';
+    document.body.insertBefore(canvas, document.body.firstChild);
   }
 
   const ctx = canvas.getContext('2d');
-  let width = (canvas.width = container.clientWidth || window.innerWidth);
-  let height = (canvas.height = container.clientHeight || window.innerHeight * 3);
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = container.clientWidth || window.innerWidth;
-    height = canvas.height = container.clientHeight || window.innerHeight * 3;
-  }, { passive: true });
-
-  const particles = [];
-  const particleCount = isMobile ? 25 : 55;
-
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      radius: Math.random() * 3 + 1.5,
-      alpha: Math.random() * 0.5 + 0.25,
-      color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
-    });
-  }
-
-  let waveOffset = 0;
-
-  function renderScrollBg() {
-    ctx.clearRect(0, 0, width, height);
-
-    waveOffset += 0.008;
-
-    ctx.beginPath();
-    ctx.moveTo(0, height * 0.2);
-    for (let x = 0; x <= width; x += 30) {
-      const y = Math.sin(x * 0.003 + waveOffset) * 60 + Math.cos(x * 0.001 + waveOffset) * 40 + height * 0.2;
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(width, height);
-    ctx.lineTo(0, height);
-    ctx.closePath();
-
-    const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, 'rgba(255, 235, 215, 0.25)');
-    grad.addColorStop(0.5, 'rgba(255, 245, 230, 0.15)');
-    grad.addColorStop(1, 'rgba(245, 240, 235, 0.05)');
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + p.alpha + ')';
-      ctx.fill();
-    }
-
-    requestAnimationFrame(renderScrollBg);
-  }
-
-  renderScrollBg();
-}
-
-// ─── 1. DYNAMIC LIVE ANIMATED BACKGROUND BEHIND LOGO ─────────────────────────
-function initLiveHeroBackground() {
-  const canvas = document.getElementById('heroBgCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
@@ -215,17 +138,17 @@ function initLiveHeroBackground() {
   }, { passive: true });
 
   const particles = [];
-  const particleCount = isMobile ? 16 : Math.min(40, Math.floor(width / 35));
+  const particleCount = isMobile ? 30 : 65;
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
-      radius: Math.random() * 3 + 2,
-      alpha: Math.random() * 0.6 + 0.3,
-      color: i % 2 === 0 ? 'rgba(230, 92, 0,' : 'rgba(249, 168, 37,'
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      radius: Math.random() * 3 + 1.5,
+      alpha: Math.random() * 0.5 + 0.25,
+      color: i % 3 === 0 ? 'rgba(230, 92, 0,' : i % 3 === 1 ? 'rgba(249, 168, 37,' : 'rgba(18, 140, 126,'
     });
   }
 
@@ -239,14 +162,16 @@ function initLiveHeroBackground() {
 
   let waveOffset = 0;
 
-  function renderHeroBg() {
+  function renderBg() {
     ctx.clearRect(0, 0, width, height);
 
-    waveOffset += 0.01;
+    waveOffset += 0.008;
+
+    // Ambient luminous wave
     ctx.beginPath();
-    ctx.moveTo(0, height * 0.5);
-    for (let x = 0; x <= width; x += 25) {
-      const y = Math.sin(x * 0.004 + waveOffset) * 45 + Math.cos(x * 0.002 + waveOffset) * 25 + height * 0.5;
+    ctx.moveTo(0, height * 0.3);
+    for (let x = 0; x <= width; x += 30) {
+      const y = Math.sin(x * 0.003 + waveOffset) * 50 + Math.cos(x * 0.0015 + waveOffset) * 35 + height * 0.3;
       ctx.lineTo(x, y);
     }
     ctx.lineTo(width, height);
@@ -254,14 +179,13 @@ function initLiveHeroBackground() {
     ctx.closePath();
 
     const grad = ctx.createLinearGradient(0, 0, width, height);
-    grad.addColorStop(0, 'rgba(255, 220, 190, 0.35)');
-    grad.addColorStop(1, 'rgba(255, 245, 235, 0.08)');
+    grad.addColorStop(0, 'rgba(255, 235, 215, 0.2)');
+    grad.addColorStop(0.5, 'rgba(255, 245, 230, 0.1)');
+    grad.addColorStop(1, 'rgba(245, 240, 235, 0.04)');
     ctx.fillStyle = grad;
     ctx.fill();
 
-    ctx.shadowBlur = isMobile ? 0 : 12;
-    ctx.shadowColor = 'rgba(230, 92, 0, 0.8)';
-
+    // Particles + Constellations
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.x += p.vx;
@@ -270,17 +194,41 @@ function initLiveHeroBackground() {
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
 
+      // Mouse repulsion/attraction
+      const dx = mouseX - p.x;
+      const dy = mouseY - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 150) {
+        p.x += (dx / dist) * 0.3;
+        p.y += (dy / dist) * 0.3;
+      }
+
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
       ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const pdx = p.x - p2.x;
+        const pdy = p.y - p2.y;
+        const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
+
+        if (pdist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(230, 92, 0, ${0.18 * (1 - pdist / 130)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
     }
 
-    ctx.shadowBlur = 0;
-    requestAnimationFrame(renderHeroBg);
+    requestAnimationFrame(renderBg);
   }
 
-  renderHeroBg();
+  renderBg();
 }
 
 // ─── HERO 3D TILT LOGO CARD ───────────────────────────────────────────────────
@@ -306,7 +254,7 @@ function initHero3dTilt() {
   });
 }
 
-// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% COVER EDGE-TO-EDGE FIT) ───
+// ─── UTILITY: ULTRA HD HIGH-PRECISION CANVAS COVER DRAWING (100% COVER FIT) ───
 function drawImageFitBox(ctx, img) {
   if (!img || !img.complete || img.naturalWidth === 0) return;
   const canvas = ctx.canvas;
