@@ -270,6 +270,22 @@
       align-items: center;
       justify-content: center;
     }
+    @media (max-width: 768px) {
+      .vehicle-grid {
+        grid-template-columns: 1fr !important;
+        padding: 0 16px !important;
+        gap: 20px !important;
+      }
+      .v-card {
+        width: 100% !important;
+      }
+      .v-img-wrap {
+        height: 200px !important;
+      }
+      .fleet-header {
+        padding: 100px 16px 30px !important;
+      }
+    }
   </style>
 </head>
 <body>
