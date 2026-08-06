@@ -948,24 +948,34 @@ body {
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .floating-quick-dock {
-    bottom: 18px;
+    bottom: 14px;
+    left: 44%;
+    transform: translateX(-50%);
     padding: 6px 10px;
-    gap: 6px;
+    gap: 4px;
+    width: max-content;
+    max-width: calc(100vw - 75px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   }
   .dock-item {
-    font-size: 11px;
-    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 6px;
+    white-space: nowrap;
+    gap: 3px;
+  }
+  .dock-item span {
+    white-space: nowrap;
   }
   .floating-whatsapp-btn {
-    bottom: 18px;
-    right: 14px;
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
+    bottom: 14px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
   }
   .scroll-section {
     height: 250vh;
-  } /* Shorter scroll height for effortless touch swipes on mobile */
   }
 
   #travels, #csc {
@@ -978,9 +988,11 @@ body {
   }
 
   .boxed-container {
-    width: 94vw;
+    width: 94vw !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    max-height: 260px !important;
     border-radius: 20px;
-    max-height: 520px;
     touch-action: pan-y;
     -webkit-overflow-scrolling: touch;
   }
